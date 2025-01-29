@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +24,7 @@ public class RabbitMQListener {
     private final ExecutorService customExecutorService;
     private final ObjectMapper customObjectMapper;
 
-    @Value("${rabbitmq.batchSize}")
     private static final int BATCH_SIZE = 10; // Number of messages per batch
-
-    @Value("${rabbitmq.batchMaxWait}")
     private static final int BATCH_MAX_WAIT = 5000; // Runs every 5 seconds to process pending messages
 
     private final List<Message> messageBuffer = new ArrayList<>(); // Buffer for batch processing
@@ -41,8 +37,9 @@ public class RabbitMQListener {
     }
 
     // To handle batch of message within a single thread
-    @RabbitListener(queues = "#{rabbitMQProperties.queue1}", concurrency = "#{rabbitMQProperties.concurrentConsumers}", ackMode = "MANUAL")
+    @RabbitListener(containerFactory = "customRabbitListenerContainerFactory", queues = "#{rabbitMQProperties.queue1}", concurrency = "#{rabbitMQProperties.concurrentConsumers}", ackMode = "MANUAL")
     public void consumeMessage(Message message, Channel channel) {
+
         synchronized (messageBuffer) {
             messageBuffer.add(message);
             lastChannel = channel; // Store the last used channel for batch acknowledgment
@@ -100,7 +97,7 @@ public class RabbitMQListener {
     }
 
     // To handle single message within a single thread
-    @RabbitListener(queues = "#{rabbitMQProperties.queue2}", concurrency = "#{rabbitMQProperties.concurrentConsumers}", ackMode = "MANUAL")
+    @RabbitListener(queues = "#{rabbitMQProperties.queue2}", concurrency = "#{rabbitMQProperties.concurrentConsumers}", ackMode = "MANUAL", containerFactory = "customRabbitListenerContainerFactory")
     public void consumeSingleMessage(Message message, Channel channel) {
         customExecutorService.submit(() -> {
             try {

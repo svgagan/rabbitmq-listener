@@ -1,5 +1,8 @@
 package com.example.rabbitmq_listener.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -11,8 +14,11 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@EnableRabbit
 @Configuration
 public class RabbitMQConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMQConfig.class);
 
     private final RabbitMQProperties properties;
 
@@ -35,9 +41,10 @@ public class RabbitMQConfig {
     }
 
     // Listener factory that will be used for fetching messages from rabbitmq.
-    @Bean
-    public RabbitListenerContainerFactory<SimpleMessageListenerContainer> rabbitListenerContainerFactory(
+    @Bean(name = "customRabbitListenerContainerFactory")
+    public RabbitListenerContainerFactory<SimpleMessageListenerContainer> customRabbitListenerContainerFactory(
             ConnectionFactory connectionFactory) {
+        logger.info("Using customRabbitListenerContainerFactory...");
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setConcurrentConsumers(properties.getConcurrentConsumers());

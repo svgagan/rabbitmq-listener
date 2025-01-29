@@ -17,8 +17,12 @@ public class RabbitMQHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            connectionFactory.createConnection().close();
-            return Health.up().withDetail("RabbitMQ", "Available").build();
+            // Check if the connection is alive (without opening a new connection)
+            if (connectionFactory.createConnection().isOpen()) {
+                return Health.up().withDetail("RabbitMQ", "Available").build();
+            } else {
+                return Health.down().withDetail("RabbitMQ", "Connection is closed").build();
+            }
         } catch (Exception e) {
             return Health.down().withDetail("RabbitMQ", "Unavailable: " + e.getMessage()).build();
         }
