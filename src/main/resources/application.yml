@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: rabbitmq-listener
+
+rabbitmq:
+  host: ${host:localhost}
+  port: ${port:5672}
+  username: ${username:guest}
+  password: ${password:guest}
+  concurrentConsumers: ${concurrentConsumers:2}
+  maxConcurrentConsumers: ${maxConcurrentConsumers:5}
+  enableVirtualThreads: ${enableVirtualThreads:false}
+  batchSize: ${batchSize:10}
+  batchMaxWeight: ${batchMaxWeight:5000}
+  queue1: ${queue1:testQueue1}
+  queue2: ${queue2:testQueue2}
+
