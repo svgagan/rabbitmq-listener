@@ -16,8 +16,8 @@ public class BatchMessageListener {
 
     private static final Logger logger = LoggerFactory.getLogger(BatchMessageListener.class);
 
-    // This batchListener reads from `consumer.queue.fault` and does manual acknowledgement.
-    @RabbitListener(ackMode = "#{rabbitMQProperties.acknowledgeMode}", queues = "${consumer.queue.fault}", containerFactory = "customRabbitListenerContainerFactory")
+    // This batchListener reads from `queue.fault` and does manual acknowledgement.
+    @RabbitListener(ackMode = "#{rabbitMQProperties.acknowledgeMode}", queues = "${queue.fault}", containerFactory = "customRabbitListenerContainerFactory")
     public void receiveBatchMessages(List<Message> messages, Channel channel) {
 
         long deliveryTag = messages.getLast().getMessageProperties().getDeliveryTag();
@@ -36,8 +36,8 @@ public class BatchMessageListener {
         }
     }
 
-    // This batchListener reads from `consumer.queue.reading` and does manual acknowledgement.
-    @RabbitListener(ackMode = "#{rabbitMQProperties.acknowledgeMode}", queues = "${consumer.queue.reading}", containerFactory = "customRabbitListenerContainerFactory")
+    // This batchListener reads from `queue.reading` and does manual acknowledgement.
+    @RabbitListener(ackMode = "#{rabbitMQProperties.acknowledgeMode}", queues = "${queue.reading}", containerFactory = "customRabbitListenerContainerFactory")
     public void receiveBatchMessages2(List<Message> messages, Channel channel) {
 
         long deliveryTag = messages.getLast().getMessageProperties().getDeliveryTag();

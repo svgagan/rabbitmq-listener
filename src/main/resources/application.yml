@@ -25,11 +25,10 @@ rabbitmq:
   batchReceiveTimeout: ${batchReceiveTimeout:5000}
   acknowledgeMode: ${acknowledgeMode:MANUAL}
 
-consumer:
-  queue:
-    fault: celery
-    asset: assets
-    reading: reading
+queue:
+  fault: celery
+  asset: assets
+  reading: reading
 
 
 logging:
