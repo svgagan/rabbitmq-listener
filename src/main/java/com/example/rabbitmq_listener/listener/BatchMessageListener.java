@@ -36,7 +36,7 @@ public class BatchMessageListener {
         }
     }
 
-    // This batchListener reads from `consumer.queue.fault` and does manual acknowledgement.
+    // This batchListener reads from `consumer.queue.reading` and does manual acknowledgement.
     @RabbitListener(ackMode = "#{rabbitMQProperties.acknowledgeMode}", queues = "${consumer.queue.reading}", containerFactory = "customRabbitListenerContainerFactory")
     public void receiveBatchMessages2(List<Message> messages, Channel channel) {
 
