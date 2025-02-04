@@ -20,11 +20,17 @@ rabbitmq:
   password: ${password:guest}
   concurrentConsumers: ${concurrentConsumers:2}
   maxConcurrentConsumers: ${maxConcurrentConsumers:5}
-  enableVirtualThreads: ${enableVirtualThreads:false}
+  enableVirtualThreads: ${enableVirtualThreads:true}
   batchSize: ${batchSize:10}
-  batchMaxWeight: ${batchMaxWeight:5000}
-  queue1: ${queue1:celery}
-  queue2: ${queue2:celery}
+  batchReceiveTimeout: ${batchReceiveTimeout:5000}
+  acknowledgeMode: ${acknowledgeMode:MANUAL}
+
+consumer:
+  queue:
+    fault: celery
+    asset: assets
+    reading: reading
+
 
 logging:
   level:

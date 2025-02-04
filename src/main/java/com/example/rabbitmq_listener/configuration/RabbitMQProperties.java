@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 public class RabbitMQProperties {
+
     private String host;
     private int port;
     private String username;
     private String password;
-    private String queue1;
-    private String queue2;
     private int concurrentConsumers;
     private int maxConcurrentConsumers;
     private boolean enableVirtualThreads;
+    private String acknowledgeMode;
     private int batchSize;
-    private int batchMaxWait;
+    private int batchReceiveTimeout;
 
     // Getters and Setters
 }
